@@ -1,0 +1,64 @@
+# dim = 100
+d = 100
+sigma <- array(1,dim = c(d, d))
+rho_1 = 0.25
+for (i in 1:d){
+  for (j in 1:d){
+    sigma[i,j]=rho_1^(abs(i-j))
+  }
+}
+print(sigma)
+library(MASS)
+mean_<- array(0, dim = c(1,d))
+n = 200
+x = mvrnorm(n,mean_,sigma)
+#print(x)
+# Generate Y and beta
+beta <- array(1, dim = c(100, 1))
+beta[98, 1] = 1
+beta[99, 1] = 1
+y = x %*% beta
+print(y)
+library(glmnet)
+#coef(fit, fit$lambda.min)
+fitcv<-cv.glmnet(x, y, family="gaussian", alpha=1)
+beta_est = coef(fitcv, fitcv$lambda.min)
+library(hdme)
+cv_fit <- cv_gds(x, y, family = "gaussian", no_lambda = 50, n_folds = 10)
+fit_gds = gds(x, y, family = "gaussian", lambda = cv_fit$lambda_min)
+print(fit_gds)
+#plot(cv_gds)
+gamma = coef(fit_gds, lambda = cv_fit$lambda_min)
+# Estimate the unknown variance
+sigma = 0
+for (j in 1:n){
+  sigma = sigma + (y[j] - x[j]%*%beta_est[j])^2
+}
+sigma = sigma/n
+print(sigma)
+Score = 0
+print(x[2,2:100])
+print(beta_est)
+s =  y[2] - x[2,2:100]%*%beta_est[3:101]
+a = x[200,1]- x[200,2:100]%*%gamma[2:100,1]
+print(a)
+for (j in 1:n){
+  Score = Score + (y[j] - x[j,2:d]%*%beta_est[2:d+1])*(x[j,1]- x[j,2:d]%*%gamma[2:d,1])
+}
+print(Score)
+Score = -1 * Score/(sigma*n)
+print(Score)
+#HatI is equal to sigma_s
+hatI = 0
+Z = 0
+for (j in 1:n){
+  Z = Z + x[j,1]^2
+}
+Z = Z/n
+B = 0
+for (j in 1:n){
+    B = B + (x[j,2:d]%*%gamma[2:d,1])*x[j,1]
+}
+B = B/n
+hatI = (Z - B)/sigma
+U = sqrt(n)*Score*abs(hatI)^(-0.5)
