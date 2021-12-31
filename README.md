@@ -3,7 +3,7 @@ The "Decorrelation-Score Function" implements a simulation function that perform
 
 Paper link:https://arxiv.org/abs/1412.8765. 
 ## Introdcution
-In this study, I focus on sparse high dimensional modeling with the general decorrelated score methods proposed in Ning, Liu, et al. (2017a) and explores to which extend does this general theory applies in regression models. A research question arises about the applicability and generalization of decorrelated score methods for interest models and other available regression models. Linear regression, logistic regression, and Poisson regresion are used to explore this question.
+In this study, I focus on sparse high dimensional modeling with the general decorrelated score methods proposed in Ning, Liu, et al. (2017a) and explores to which extend does this general theory applies in regression models. A research question arises about the applicability and generalization of decorrelated score methods for interest models and other available regression models. Linear regression, logistic regression, and Poisson regression are used to explore this question.
 ## Results Display 
 Here are some replication simulation results of the power with linear regression, logistic regression, and Poisson regression:
 ![result2](https://user-images.githubusercontent.com/59536847/147810193-edd96b10-2c96-4750-b17b-cc2012ffa2f7.PNG)
