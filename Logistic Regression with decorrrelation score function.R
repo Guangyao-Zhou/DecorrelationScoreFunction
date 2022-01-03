@@ -27,25 +27,26 @@ Simulation<-function(n,d,rho){
   beta[2] = 1
   beta[3] = 1
   beta[4] = 1
+  # You can use this code to implement linear regression, Logistic regress, and Poisson regression.
   #Linear regression
   #y = x %*% beta
   #Poisson regression
   # y <- rpois(n, exp(x %*% beta))
-  #Logistic regression
+  #Logistic regression, see below.
   y <- rbinom(n, 1, (1 + exp(-x %*% beta))^(-1))
   fitcv<-cv.glmnet(x, y, family="binomial", alpha=1)
   beta_est = coef(fitcv, fitcv$lambda.min)
-  #Poisson regression with lasso or SCAD
-  # You can choose a family type to make lienar, logistic, and Poisson regression
-  #fitcv<-cv.ncvreg(x, y, penalty='SCAD',family="poisson" )
-  #fitcv<-ncvreg(x, y, penalty='SCAD',family="poisson")
-  #beta_est = coef(fitcv, fitcv$lambda.min)
+  # "Glmnet" is a package that fits generalized linear and similar models via penalized maximum likelihood.
+  # You can choose a family type to make linear, logistic, and Poisson regression
+  # For example, fitcv<-cv.ncvreg(x, y, penalty='SCAD',family="poisson" ).
+  # fitcv<-ncvreg(x, y, penalty='SCAD',family="poisson")
+  # beta_est = coef(fitcv, fitcv$lambda.min)
   
   c = array(0, dim = c(500, 1))
   # This part is to estimate a Dantzig Selector. 
   # For linear regression, we do not need to calculate x_,z_
-  #x_,z_ are to calculate the Dantzig Selector. 
-  # For Poisson regression, x_,z_ is set based on partial Fisher information 
+  # x_,z_ are to calculate the Dantzig Selector. 
+  # For Poisson regression, x_,z_ is set based on partial Fisher information. See paper Ning, 2017.
   for (i in 1:n ) {
     c[i,1] =  sqrt(exp( x[i, 1:d]%*%beta_est[2:(d+1) ] ) / (1 + exp( x[i, 1:d]%*%beta_est[2:(d+1) ] ) )^2 )
   }
@@ -58,6 +59,7 @@ Simulation<-function(n,d,rho){
   z_ = x[1:n,1]
   x_ = x[1:n, 2:d]
   # Cross-validation
+  # Generalized Dantzig Selector with cross-validation.
   cv_fit <- cv_gds(x_, z_, family = "gaussian", no_lambda = 50, n_folds = 10)
   fit_gds = gds(x_, z_, family = "gaussian", lambda = cv_fit$lambda_min)
   gamma = coef(fit_gds)
@@ -81,8 +83,6 @@ Simulation<-function(n,d,rho){
     wx=0
     for(j_3 in 1:dim(gamma)[1]){
       wx = wx + x_[j_2, gamma[j_3,1]]*gamma[(j_3),2]
-      #print(x[j_2, gamma[j_3,1]])
-      #print(gamma[j_3, 2])
     }
     if(dim(gamma)[1] == 0  ){
       wx = 0
