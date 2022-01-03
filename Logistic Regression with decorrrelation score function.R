@@ -10,8 +10,11 @@ library(MASS)
 # You can choose "glmnet" for lasso or "ncvreg" for SCAD.
 # You can choose a family type to make lienar, logistic, and Poisson regression
 library(glmnet)
+# Document link:https://cran.r-project.org/web/packages/glmnet/glmnet.pdf
 library(ncvreg)
+# Documet link:https://cran.r-project.org/web/packages/ncvreg/ncvreg.pdf
 library(hdme)
+# Document link:https://cran.r-project.org/web/packages/hdme/hdme.pdf
 Simulation<-function(n,d,rho){
   Sigma <- array(1,dim = c(d, d))
   for (i in 1:d){
