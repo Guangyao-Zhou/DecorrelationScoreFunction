@@ -1,5 +1,5 @@
-# This is a tutorial for the simulation process for Paper "A GENERAL THEORY OF HYPOTHESIS TESTS AND CONFIDENCE REGIONS FOR SPARSE HIGH DIMENSIONAL MODELS". 
-# Model: Linear Regression with Decorrelated Score Method 
+# This is a tutorial for the simulation process of Paper "A GENERAL THEORY OF HYPOTHESIS TESTS AND CONFIDENCE REGIONS FOR SPARSE HIGH DIMENSIONAL MODELS". 
+# Model: Logistic Regression with Decorrelated Score Method 
 # Main settings: d (dimension), rho, n = 500;
 # Throughout the simulation study, I first set the data generator process (DGP) of the covariates X:
 # n = 100 independent and identical distribution samples with a multivariate Gaussian distribution
@@ -70,16 +70,6 @@ Simulation<-function(n,d,rho){
   #calculate sum of score
   score=0
   score_005 = 0
-  score_010 = 0
-  score_015 = 0
-  score_020 = 0
-  score_025 = 0
-  score_030 = 0
-  score_035 = 0
-  score_040 = 0
-  score_045 = 0
-  score_050 = 0
-  score_055 = 0
   score_interval = 0
   I=0 # Partial Fisher Information
   for (j_2 in (1:n)){
@@ -90,33 +80,12 @@ Simulation<-function(n,d,rho){
     if(dim(gamma)[1] == 0  ){
       wx = 0
     }
-    
     score_interval = score_interval + (y[j_2] - (exp(x[j_2, 1:d]%*%beta_est[2:(d+1) ])
                                                  /(1+exp(beta_est[1]+ x[j_2, 1:d]%*%beta_est[2:(d+1)])) )   )*(x[j_2, 1]-wx)
     score=score+ (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)])
                             /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)])) )   )*(x[j_2, 1]-wx)
     score_005 = score_005 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.05 * x[j_2, 1])
                                        /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.05*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
-    score_010 = score_010 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.10 * x[j_2, 1])
-                                       /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.10*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
-    score_015 = score_015 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.15 * x[j_2, 1])
-                                       /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.15*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
-    score_020 = score_020 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.20 * x[j_2, 1])
-                                       /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.20*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
-    score_025 = score_025 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.25 * x[j_2, 1])
-                                       /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.25*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
-    score_030 = score_030 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.30 * x[j_2, 1])
-                                       /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.30*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
-    score_035 = score_035 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.35 * x[j_2, 1])
-                                       /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.35*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
-    score_040 = score_040 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.40 * x[j_2, 1])
-                                       /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.40*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
-    score_045 = score_045 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.45 * x[j_2, 1])
-                                       /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.45*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
-    score_050 = score_050 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.50 * x[j_2, 1])
-                                       /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.50*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
-    score_055 = score_055 + (y[j_2] - (exp(x[j_2, 2:d]%*%beta_est[3:(d+1)]  + 0.55 * x[j_2, 1])
-                                       /(1+exp( x[j_2, 2:d]%*%beta_est[3:(d+1)] + 0.55*x[j_2, 1]  ) ) )   )*(x[j_2, 1]-wx)
     # Partial Fisher Information
     I = I + (exp(x[j_2, 1:d]%*%beta_est[2:(d+1)]) 
              / (1+exp(x[j_2, 1:d]%*%beta_est[2:(d+1)]) )^2) *x[j_2,1]*(x[j_2,1] - wx) 
